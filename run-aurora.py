@@ -1,6 +1,6 @@
 import torch
 from torch.utils.data import TensorDataset, DataLoader
-from aurora import AuroraSmallPretrained, Batch, Metadata
+from aurora import AuroraPretrained, Batch, Metadata
 from aurora import rollout
 import pickle
 from huggingface_hub import hf_hub_download
@@ -11,7 +11,7 @@ from tqdm import tqdm
 import pandas as pd
 
 in_path = '/mnt/data/sonia/aurora-data/date/input-natlantic-multivar-fullcontext/test'
-out_path = '/mnt/data/sonia/aurora-out/date/raw-natlantic-multivar-fullcontext/test'
+out_path = '/mnt/data/sonia/aurora-out/date/raw-natlantic-multivar-fullcontext/debug'
 timesteps = 8
 batch_size = 2
 
@@ -22,8 +22,8 @@ t_channel = 3
 q_channel = 4
 
 #### Load tracks data
-trackspath1='/home/sonia/mcms/tracker/1940-2010/era5/out_era5/era5/mcms_era5_1940_2010_tracks.txt'
-trackspath2='/home/sonia/mcms/tracker/2010-2024/era5/out_era5/era5/FIXEDmcms_era5_2010_2024_tracks.txt'
+trackspath1='/mnt/data/sonia/mcms/tracker/1940-2010/era5/out_era5/era5/mcms_era5_1940_2010_tracks.txt'
+trackspath2='/mnt/data/sonia/mcms/tracker/2010-2024/era5/out_era5/era5/FIXEDmcms_era5_2010_2024_tracks.txt'
 joinyear = 2010 # overlap for the track data
 start_year = 1940 #inclusive
 stop_year = 2024 #inclusive
@@ -59,7 +59,7 @@ tracks = tracks[['year', 'month', 'day', 'hour', 'tid', 'sid', 'lat', 'lon']]
 
 # Initialize the model and load the weights from Hugging Face
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-model = AuroraSmallPretrained().to(device)
+model = AuroraPretrained().to(device)
 model.load_checkpoint() # This will trigger a one-time download of the weights
 
 from datetime import datetime
